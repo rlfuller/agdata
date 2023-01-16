@@ -1,17 +1,11 @@
 ﻿using agdata.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace agdata.Selenium.Pages
 {
-    internal class BasePage
+    internal abstract class BasePage
     {
         protected IWebDriver driver;
         protected ITestConfig config = TestConfigFactory.CurrentEnvironmentTestConfig;
@@ -19,16 +13,10 @@ namespace agdata.Selenium.Pages
         [FindsBy(How = How.Id, Using = "site-navigation")]
         private IWebElement navigationMenu { get; set; }
 
-        //private IWebElement companyMenu = navigationMenu.FindElement(By.)
-
-        // [FindsBy(How = How.XPath, Using =".//#site-navigation/ ")]
-        // private IWebElement companyMenu { get;set }
-
 
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
-           // WaitUntilReady();
             PageFactory.InitElements(driver, this);
         }
 
