@@ -13,8 +13,6 @@ namespace agdata.Selenium.Tests
 
             var careersPage = new CareersPage(driver);
             careersPage.ClickOnSecondManagerJobListing();
-
-            Console.Write("hello");
         }
     }
 }

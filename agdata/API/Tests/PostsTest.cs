@@ -219,5 +219,93 @@ namespace agdata.API.Tests
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         }
+
+        /// <summary>
+        /// Create a comment on a post with valid data and validate the post is successful
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="body"></param>
+        [TestCase("John", "test@test.com", "Comment Body", TestName = "Default Data")]
+        [TestCase("Sørina", "test@test.com", "Comment Body", TestName = "Unicode Name")]
+        public void CreateCommentIsSuccessfulWithValidData(string name, string email, string body)
+        {
+            //get a post so we can add a comment to one
+            Post post = GetAllPosts().First();
+
+            var comment = new
+            {
+                Name = name,
+                Email = email,
+                Body = body
+            };
+
+            RestRequest request = new RestRequest($"{basePath}{post.Id}/comments/");
+
+            request.AddBody(comment, ContentType.Json);
+
+            RestResponse response = client.Post(request);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+
+            Comment created = JsonConvert.DeserializeObject<Comment>(response.Content);
+
+            Assert.That(created.Id, Is.EqualTo(501));
+            Assert.That(created.Name, Is.EqualTo(name));
+            Assert.That(created.Email, Is.EqualTo(email));
+            Assert.That(created.Body, Is.EqualTo(body));
+            Assert.That(created.PostId, Is.EqualTo(post.Id));
+
+        }
+
+        /// <summary>
+        /// Create a comment on a post with invalid data and validate the post is not successful
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="body"></param>
+        [TestCase("John", "test@test", "Comment Body", TestName = "Invalid Email Format")]
+        [TestCase("Sørina", "", "Comment Body", TestName = "Empty Email")]
+        [TestCase("", "test@test.com", "Comment Body", TestName = "Missing Name")]
+        public void CreateCommentIsNotSuccessfulWithInvalidData(string name, string email, string body)
+        {
+            //get a post so we can add a comment to one
+            Post post = GetAllPosts().First();
+
+            var comment = new
+            {
+                Name = name,
+                Email = email,
+                Body = body
+            };
+
+            RestRequest request = new RestRequest($"{basePath}{post.Id}/comments/");
+
+            request.AddBody(comment, ContentType.Json);
+
+            RestResponse response = client.Post(request);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+
+        }
+
+        /// <summary>
+        /// Validate that we can get all comments for a post resource
+        /// </summary>
+        [Test]
+        public void GetAllCommentsForAPostIsSuccessful()
+        {
+            //get a post so we can then grab it's comments
+            Post post = GetAllPosts().First();
+
+            RestRequest request = new RestRequest($"/comments/?postId={post.Id}");
+
+            RestResponse response = client.Get(request);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.ContentType, Is.EqualTo(ContentType.Json));
+
+            IList<Comment> comments =  JsonConvert.DeserializeObject<IList<Comment>>(response.Content);
+        }
     }
 }
