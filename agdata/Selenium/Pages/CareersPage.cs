@@ -37,6 +37,12 @@ namespace agdata.Selenium.Pages
             return this;
         }
 
+        /// <summary>
+        /// Method that is used to click 'Continue' on the popup on the careers page
+        /// </summary>
+        /// <param name="remaining">Used as a counter to check and make sure the popup has been dismissed.</param>
+        /// <param name="ignoreException">Used to determine if we want to ignore an element not found exception. Assumption is that if the popup is not found, it could have already been dismissed, so we can ignore the exception and continue with the test.</param>
+        /// <returns></returns>
         public CareersPage AcceptCookies(int remaining = 1, bool ignoreException = true)
         {
             try

@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace agdata.API.Models
 {
-    internal class Comments
+    internal class Comment
     {
         [JsonProperty("postId")]
         public int PostId { get; set; }

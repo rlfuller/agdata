@@ -21,11 +21,14 @@ namespace agdata.Selenium.Pages
         }
 
 
+        /// <summary>
+        /// Navigate to a page from the navigation menu at the top of the page
+        /// </summary>
+        /// <param name="mainMenuText">Top Level Menu item to hover over</param>
+        /// <param name="subMenuText">Sub menu to click.</param>
+        /// <returns></returns>
         public BasePage ClickMenuItem(string mainMenuText, string? subMenuText = null)
         {
-            // IWebElement ele = navigationMenu.FindElement(By.XPath($"//a[contains(text(), '{hoverText}')]"));
-
-            // var element = wait.Until(ExpectedConditions.El)
             string xPath = constructXPathForMenu(mainMenuText);
             IWebElement ele = navigationMenu.FindElement(By.XPath(xPath));
             Actions action = new Actions(driver);
@@ -45,7 +48,6 @@ namespace agdata.Selenium.Pages
 
         public BasePage ClickSubMenu(string menuText)
         {
-           // WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             ClickMenuItem("Contact");
             return this;
         }
